@@ -36,11 +36,12 @@ class Logger(object):
         "LOG_DEBUG": 7,
       }
 
-  def __init__(self, facility = "LOG_USER", level = "LOG_INFO"):
+  def __init__(self, facility = "LOG_USER", level = "LOG_INFO", logger = logging ):
     self._facility = None
     self._level = None
     self.set_facility(facility)
     self.set_level(level)
+    self._logger = logging
     pass
 
   def get_facility(self):
@@ -74,9 +75,9 @@ class Logger(object):
       )
 
   def log(self, message):
-    pass
+    l = self._logger.getLogger(__name__)
+    syslog_handler = handlers.SysLogHandler(facility = self.facility)
+    l.addHandler(syslog_handler)
+    l.log(self.level, message)
 
-  @classmethod
-  def Log(cls, facility, level, message):
-    pass
 

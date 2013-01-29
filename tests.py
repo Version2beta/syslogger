@@ -1,4 +1,5 @@
 import unittest
+from dingus import Dingus
 from expecter import expect
 
 from syslogger import Logger
@@ -25,4 +26,9 @@ class TestLoggingLevels(unittest.TestCase):
     l = Logger(level = "LOG_NOT_REAL")
     expect(l.level) == 6
 
-
+class TestLogging(unittest.TestCase):
+  logger = Dingus()
+  def testLogging(self):
+    l = Logger(logger = self.logger)
+    l.log('Test message')
+    expect(self.logger.calls('log').once());
