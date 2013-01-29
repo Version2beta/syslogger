@@ -6,7 +6,7 @@ A quick program to write to a specified log facility at a specified log level.
 Usage:
 
 ```
-syslogger.py FACILITY LEVEL [--address ADDR [PORT]] MSG
+syslogger.py FACILITY LEVEL MESSAGE
 ```
 
 where FACILITY is one of:
@@ -43,3 +43,6 @@ and LEVEL is one of:
 * LOG_ALERT
 * LOG_EMERG
 
+and MESSAGE is the message you'd like to log.
+
+I originally wrote this so I had a way to quickly and easily test my syslog-ng configuration. Of course there were probably already programs that would do this, but I had trouble finding them, so I landed here instead. On the bright side, it gave me the opportunity to mock the Python logging class for my unit test, using Gary Bernhardt's Dingus library. https://github.com/garybernhardt/dingus. I also used his Expecter library again. Big thanks to Gary.
