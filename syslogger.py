@@ -1,4 +1,4 @@
-from argparse import ArgumentParser
+import argparse
 from logging import handlers
 import logging
 
@@ -76,7 +76,6 @@ class Logger(object):
       )
 
   def log(self, message):
-    print __name__, self.address, self.facility, self.level, message
     l = self._logger.getLogger(__name__)
     syslog_handler = handlers.SysLogHandler(
           address = self.address,
@@ -86,7 +85,14 @@ class Logger(object):
     l.log(self.level, message)
 
 def main():
-  parser = ArgumentParser()
+  facs_and_levels = ( "A valid logging facility and level are required." +
+        "\n\nFacilities:\n%s" % ", ".join(sorted(Logger.facilities)) +
+        "\n\nLevels:\n%s" % ", ".join(sorted(Logger.levels)) + "\n"
+      )
+  parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog = facs_and_levels
+      )
   parser.add_argument(
         'facility',
         default = DEFAULT_FACILITY,
@@ -110,9 +116,7 @@ def main():
   try:
     l = Logger(args.facility, args.level, address = args.address)
   except KeyError:
-    print "A valid logging facility and level are required."
-    print "Facilities: %s" % ", ".join(Logger.facilities)
-    print "Levels: %s" % ", ".join(Logger.levels)
+    print facs_and_levels
     return
   l.log(args.message)
 
