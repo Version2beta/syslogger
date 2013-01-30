@@ -2,44 +2,45 @@ from argparse import ArgumentParser
 from logging import handlers
 import logging
 
+DEFAULT_FACILITY = "USER"
+DEFAULT_LEVEL = "INFO"
+DEFAULT_ADDRESS = "/dev/log"
+
 class Logger(object):
   facilities = {
-        "LOG_KERN": 0,
-        "LOG_USER": 1,
-        "LOG_MAIL": 2,
-        "LOG_DAEMON": 3,
-        "LOG_AUTH": 4,
-        "LOG_SYSLOG": 5,
-        "LOG_LPR": 6,
-        "LOG_NEWS": 7,
-        "LOG_UUCP": 8,
-        "LOG_CRON": 9,
-        "LOG_AUTHPRIV": 10,
-        "LOG_FTP": 11,
-        "LOG_LOCAL0": 16,
-        "LOG_LOCAL1": 17,
-        "LOG_LOCAL2": 18,
-        "LOG_LOCAL3": 19,
-        "LOG_LOCAL4": 20,
-        "LOG_LOCAL5": 21,
-        "LOG_LOCAL6": 22,
-        "LOG_LOCAL7": 23,
+        "KERN": 0,
+        "USER": 1,
+        "MAIL": 2,
+        "DAEMON": 3,
+        "AUTH": 4,
+        "SYSLOG": 5,
+        "LPR": 6,
+        "NEWS": 7,
+        "UUCP": 8,
+        "CRON": 9,
+        "AUTHPRIV": 10,
+        "FTP": 11,
+        "LOCAL0": 16,
+        "LOCAL1": 17,
+        "LOCAL2": 18,
+        "LOCAL3": 19,
+        "LOCAL4": 20,
+        "LOCAL5": 21,
+        "LOCAL6": 22,
+        "LOCAL7": 23,
       }
   levels = {
-        "LOG_EMERG": 0,
-        "LOG_ALERT": 1,
-        "LOG_CRIT": 2,
-        "LOG_ERR": 3,
-        "LOG_WARNING": 4,
-        "LOG_NOTICE": 5,
-        "LOG_INFO": 6,
-        "LOG_DEBUG": 7,
+        "CRITICAL": 50,
+        "ERROR": 40,
+        "WARNING": 30,
+        "INFO": 20,
+        "DEBUG": 10,
       }
 
   def __init__(self,
-        facility = "LOG_USER",
-        level = "LOG_INFO",
-        address = "/dev/log",
+        facility = DEFAULT_FACILITY,
+        level = DEFAULT_LEVEL,
+        address = DEFAULT_ADDRESS,
         logger = logging
       ):
     self._facility = None
@@ -55,7 +56,7 @@ class Logger(object):
   def set_facility(self, facility):
     self._facility = self.facilities[facility]
   def del_facility(self):
-    self.facility("LOG_USER")
+    self.facility(DEFAULT_FACILITY)
   facility = property(
         fget = get_facility,
         fset = set_facility,
@@ -67,7 +68,7 @@ class Logger(object):
   def set_level(self, level):
     self._level = self.levels[level]
   def del_level(self):
-    self.level("LOG_INFO")
+    self.level(DEFAULT_LEVEL)
   level = property(
         fget = get_level,
         fset = set_level,
@@ -88,12 +89,12 @@ def main():
   parser = ArgumentParser()
   parser.add_argument(
         'facility',
-        default = "LOG_USER",
+        default = DEFAULT_FACILITY,
         help = "Log facility that should receive message"
       )
   parser.add_argument(
         'level',
-        default = "LOG_INFO",
+        default = DEFAULT_LEVEL,
         help = "Log level for the message"
       )
   parser.add_argument(
@@ -102,7 +103,7 @@ def main():
       )
   parser.add_argument(
         '--address',
-        default = "/dev/log",
+        default = DEFAULT_ADDRESS,
         help = "Socket or network address syslog daemon listens to"
       )
   args = parser.parse_args()
