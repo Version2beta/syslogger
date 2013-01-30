@@ -12,8 +12,8 @@ class TestLoggingFacilities(unittest.TestCase):
     l = Logger(facility = "LOG_DAEMON")
     expect(l.facility) == 3
   def testSettingInvalidFacility(self):
-    l = Logger(facility = "LOG_NOT_REAL")
-    expect(l.facility) == 1
+    with expect.raises(KeyError):
+      l = Logger(facility = "LOG_NOT_REAL")
 
 class TestLoggingLevels(unittest.TestCase):
   def testDefaultLevel(self):

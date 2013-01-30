@@ -3,7 +3,7 @@ from logging import handlers
 import logging
 
 class Logger(object):
-  _facilities = {
+  facilities = {
         "LOG_KERN": 0,
         "LOG_USER": 1,
         "LOG_MAIL": 2,
@@ -25,7 +25,7 @@ class Logger(object):
         "LOG_LOCAL6": 22,
         "LOG_LOCAL7": 23,
       }
-  _levels = {
+  levels = {
         "LOG_EMERG": 0,
         "LOG_ALERT": 1,
         "LOG_CRIT": 2,
@@ -36,21 +36,24 @@ class Logger(object):
         "LOG_DEBUG": 7,
       }
 
-  def __init__(self, facility = "LOG_USER", level = "LOG_INFO", logger = logging ):
+  def __init__(self,
+        facility,
+        level,
+        address,
+        logger = logging
+      ):
     self._facility = None
     self._level = None
     self.set_facility(facility)
     self.set_level(level)
+    self.address = address
     self._logger = logging
     pass
 
   def get_facility(self):
     return self._facility
   def set_facility(self, facility):
-    if facility in self._facilities:
-      self._facility = self._facilities[facility]
-    else:
-      self._facility = self._facilities["LOG_USER"]
+    self._facility = self.facilities[facility]
   def del_facility(self):
     self.facility("LOG_USER")
   facility = property(
@@ -62,10 +65,7 @@ class Logger(object):
   def get_level(self):
     return self._level
   def set_level(self, level):
-    if level in self._levels:
-      self._level = self._levels[level]
-    else:
-      self._level = self._levels["LOG_INFO"]
+    self._level = self.levels[level]
   def del_level(self):
     self.level("LOG_INFO")
   level = property(
@@ -76,8 +76,43 @@ class Logger(object):
 
   def log(self, message):
     l = self._logger.getLogger(__name__)
-    syslog_handler = handlers.SysLogHandler(facility = self.facility)
+    syslog_handler = handlers.SysLogHandler(
+          address = self.address,
+          facility = self.facility
+        )
     l.addHandler(syslog_handler)
     l.log(self.level, message)
 
+def main():
+  parser = ArgumentParser()
+  parser.add_argument(
+        'facility',
+        default = "LOG_USER",
+        help = "Log facility that should receive message"
+      )
+  parser.add_argument(
+        'level',
+        default = "LOG_INFO",
+        help = "Log level for the message"
+      )
+  parser.add_argument(
+        'message',
+        help = "Message to log"
+      )
+  parser.add_argument(
+        '--address',
+        default = "/dev/log",
+        help = "Socket or network address syslog daemon listens to"
+      )
+  args = parser.parse_args()
+  try:
+    l = Logger(args.facility, args.level, address = args.address)
+  except KeyError:
+    print "A valid logging facility and level are required."
+    print "Facilities: %s" % ", ".join(Logger.facilities)
+    print "Levels: %s" % ", ".join(Logger.levels)
+    return
+  l.log(args.message)
 
+if __name__ == '__main__':
+  main()
