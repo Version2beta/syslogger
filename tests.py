@@ -9,22 +9,22 @@ class TestLoggingFacilities(unittest.TestCase):
     l = Logger()
     expect(l.facility) == 1
   def testSettingValidFacility(self):
-    l = Logger(facility = "LOG_DAEMON")
+    l = Logger(facility = "DAEMON")
     expect(l.facility) == 3
   def testSettingInvalidFacility(self):
     with expect.raises(KeyError):
-      l = Logger(facility = "LOG_NOT_REAL")
+      l = Logger(facility = "NOT_REAL")
 
 class TestLoggingLevels(unittest.TestCase):
   def testDefaultLevel(self):
     l = Logger()
-    expect(l.level) == 6
+    expect(l.level) == 20
   def testSettingValidLevel(self):
-    l = Logger(level = "LOG_DEBUG")
-    expect(l.level) == 7
+    l = Logger(level = "DEBUG")
+    expect(l.level) == 10
   def testSettingInvalidLevel(self):
     with expect.raises(KeyError):
-      l = Logger(level = "LOG_NOT_REAL")
+      l = Logger(level = "NOT_REAL")
 
 class TestLogging(unittest.TestCase):
   logger = Dingus()
