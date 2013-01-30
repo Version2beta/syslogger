@@ -23,8 +23,8 @@ class TestLoggingLevels(unittest.TestCase):
     l = Logger(level = "LOG_DEBUG")
     expect(l.level) == 7
   def testSettingInvalidLevel(self):
-    l = Logger(level = "LOG_NOT_REAL")
-    expect(l.level) == 6
+    with expect.raises(KeyError):
+      l = Logger(level = "LOG_NOT_REAL")
 
 class TestLogging(unittest.TestCase):
   logger = Dingus()

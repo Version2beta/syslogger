@@ -37,9 +37,9 @@ class Logger(object):
       }
 
   def __init__(self,
-        facility,
-        level,
-        address,
+        facility = "LOG_USER",
+        level = "LOG_INFO",
+        address = "/dev/log",
         logger = logging
       ):
     self._facility = None
@@ -75,6 +75,7 @@ class Logger(object):
       )
 
   def log(self, message):
+    print __name__, self.address, self.facility, self.level, message
     l = self._logger.getLogger(__name__)
     syslog_handler = handlers.SysLogHandler(
           address = self.address,
