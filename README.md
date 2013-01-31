@@ -44,4 +44,4 @@ and ADDRESS is the address of the socket that your system logger is listening to
 
 and MESSAGE is the message you'd like to log.
 
-I originally wrote this so I had a way to quickly and easily test my syslog-ng configuration. Of course there were probably already programs that would do this, but I had trouble finding them, so I landed here instead. On the bright side, it gave me the opportunity to mock the Python logging class for my unit test, using Gary Bernhardt's Dingus library. https://github.com/garybernhardt/dingus. I also used his Expecter library again. Big thanks to Gary.
+I originally wrote this so I had a way to quickly and easily test my syslog-ng configuration. Of course there were probably already programs that would do this, but for whatever dumb reason, I couldn't find them. (`logger` came to mind much later - http://unixhelp.ed.ac.uk/CGI/man-cgi?logger+1.) On the bright side, it gave me the opportunity to mock the Python logging class for my unit test, using Gary Bernhardt's Dingus library. https://github.com/garybernhardt/dingus. I also used his Expecter library again. Big thanks to Gary. He's been my goto for Python + TDD.
