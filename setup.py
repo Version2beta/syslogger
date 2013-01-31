@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='Syslogger',
-    version='0.0.2',
+    version='0.0.3',
     author='Rob Martin @version2beta',
     author_email='rob@version2beta.com',
     packages=['syslogger'],
